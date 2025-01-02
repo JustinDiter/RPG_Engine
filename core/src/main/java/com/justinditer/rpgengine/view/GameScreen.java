@@ -3,7 +3,11 @@ package com.justinditer.rpgengine.view;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -12,7 +16,10 @@ import com.justinditer.rpgengine.RPGGame;
 public class GameScreen extends ScreenAdapter {
     RPGGame game;
     BitmapFont font;
-    Stage stage;
+    TmxMapLoader mapLoader;
+    TiledMap tiledMap;
+    OrthogonalTiledMapRenderer tiledMapRenderer;
+    OrthographicCamera camera;
 
     public GameScreen(RPGGame game) {
         this.game = game;
@@ -20,29 +27,28 @@ public class GameScreen extends ScreenAdapter {
 
     @Override
     public void show(){
-        stage = new Stage(new FitViewport(800, 600));
+        // Map setup
+        mapLoader = new TmxMapLoader();
+        tiledMap = mapLoader.load("testMap.tmx");
+        tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap, 1f);
 
-        Gdx.input.setInputProcessor(stage);
+        // Camera setup
+        camera = new OrthographicCamera();
+        camera.setToOrtho(false, 640, 480);
 
-        Label.LabelStyle labelStyle = new Label.LabelStyle();
-        labelStyle.font = new BitmapFont();
-
-        Label gameLabel = new Label("Placeholder Game screen !", labelStyle);
-
-        gameLabel.setPosition(400, 400);
-
-        stage.addActor(gameLabel);
     }
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(0,1,0,1);
+        Gdx.gl.glClearColor(0,0,0,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        stage.act(delta);
-        stage.draw();
+        camera.update();
+        tiledMapRenderer.setView(camera);
+        tiledMapRenderer.render();
     }
     @Override
     public void dispose() {
-        stage.dispose();
+        tiledMap.dispose();
+        tiledMapRenderer.dispose();
     }
 }

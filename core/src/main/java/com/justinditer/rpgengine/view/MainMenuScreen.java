@@ -13,7 +13,7 @@ import com.justinditer.rpgengine.RPGGame;
 public class MainMenuScreen extends ScreenAdapter {
     RPGGame game;
     BitmapFont font;
-    Stage stage;
+    Stage mainStage;
 
     public MainMenuScreen(RPGGame game) {
         this.game = game;
@@ -21,9 +21,9 @@ public class MainMenuScreen extends ScreenAdapter {
 
     @Override
     public void show(){
-        stage = new Stage(new FitViewport(800, 600));
+        mainStage = new Stage(new FitViewport(800, 600));
 
-        Gdx.input.setInputProcessor(stage);
+        Gdx.input.setInputProcessor(mainStage);
 
         Label.LabelStyle labelStyle = new Label.LabelStyle();
         labelStyle.font = new BitmapFont();
@@ -34,16 +34,16 @@ public class MainMenuScreen extends ScreenAdapter {
         titleLabel.setPosition(400, 400);
         interactLabel.setPosition(400, 200);
 
-        stage.addActor(titleLabel);
-        stage.addActor(interactLabel);
+        mainStage.addActor(titleLabel);
+        mainStage.addActor(interactLabel);
     }
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(0,0,0,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        stage.act(delta);
-        stage.draw();
+        mainStage.act(delta);
+        mainStage.draw();
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER) || Gdx.input.isKeyJustPressed(Input.Keys.NUMPAD_ENTER)) {
             game.setScreen(new GameScreen(game));
@@ -51,6 +51,6 @@ public class MainMenuScreen extends ScreenAdapter {
     }
     @Override
     public void dispose() {
-        stage.dispose();
+        mainStage.dispose();
     }
 }

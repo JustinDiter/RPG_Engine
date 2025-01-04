@@ -11,6 +11,7 @@ public class GameController extends InputAdapter {
     private Player player;
     private MapManager mapManager;
     private Direction direction;
+    private boolean menuActive;
 
     public GameController(Player player, MapManager mapManager) {
         this.player = player;
@@ -18,6 +19,10 @@ public class GameController extends InputAdapter {
     }
     @Override
     public boolean keyDown(int keycode) {
+        if (keycode == Input.Keys.ESCAPE) {
+            menuActive = !menuActive;
+            return true;
+        }
         Direction direction = null;
         if (keycode == Input.Keys.UP) {
             direction = Direction.UP;
@@ -29,14 +34,21 @@ public class GameController extends InputAdapter {
             direction = Direction.RIGHT;
         }
 
-        if (direction != null) {
+        if (direction != null && !menuActive) {
             Vector2 targetPosition = player.getMoveTarget(direction);
             if (mapManager.isWithinBounds(targetPosition) && !mapManager.isCollidable(targetPosition)) {
                 player.setPosition(targetPosition);
             }
             return true; // Input processed
+        } else if (menuActive) {
+            // TODO: Handle menu related inputs
+            return true;
         }
 
         return false; // Input not processed
+    }
+
+    public boolean isMenuActive() {
+        return menuActive;
     }
 }

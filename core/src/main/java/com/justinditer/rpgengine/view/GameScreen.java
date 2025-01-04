@@ -4,9 +4,11 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
@@ -26,18 +28,16 @@ public class GameScreen extends ScreenAdapter {
     private Player player;
     private MapManager mapManager;
     private GameController gameController;
+    private ShapeRenderer shapeRenderer;
 
     public GameScreen(RPGGame game) {
         this.game = game;
-        this.player = new Player("Guy", new Vector2(32, 32), 100, game.getPlayerTexture());
-        Gdx.app.log("GameScreen", "Player initialized: " + player);
         this.mapLoader = new TmxMapLoader();
         this.tiledMap = mapLoader.load("testMap.tmx");
-        Gdx.app.log("GameScreen", "Tiled map loaded: " + tiledMap);
         this.mapManager = new MapManager(tiledMap);
-        Gdx.app.log("GameScreen", "MapManager initialized: " + mapManager);
+        Vector2 startPosition = mapManager.getPlayerStartPosition(mapManager.getInteractionObjects());
+        this.player = new Player("Guy", startPosition, 100, game.getPlayerTexture());
         this.gameController = new GameController(player, mapManager);
-        Gdx.app.log("GameScreen", "GameController initialized: " + gameController);
     }
 
     @Override
@@ -51,23 +51,42 @@ public class GameScreen extends ScreenAdapter {
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 640, 480);
 
+        // Shape renderer set up for UI boxes
+        shapeRenderer = new ShapeRenderer();
     }
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(0,0,0,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+        player.update(delta);
 
         camera.update();
         tiledMapRenderer.setView(camera);
         tiledMapRenderer.render();
 
-        player.update(delta);
 
         game.getBatch().begin();
         player.render(game.getBatch());
         game.getBatch().end();
+
+        if (gameController.isMenuActive()) {
+            drawMenu();
+        }
     }
+
+    private void drawMenu() {
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        shapeRenderer.setColor(Color.BLACK);
+        shapeRenderer.rect(200, 150, 400, 300); // Adjust x, y, width, height
+        shapeRenderer.end();
+
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+        shapeRenderer.setColor(Color.WHITE);
+        shapeRenderer.rect(200, 150, 400, 300); // Same dimensions for the border
+        shapeRenderer.end();
+    }
+
     @Override
     public void dispose() {
         if (tiledMapRenderer != null) {
@@ -79,5 +98,9 @@ public class GameScreen extends ScreenAdapter {
         if (camera != null) {
             camera = null;
         }
+        if (shapeRenderer != null) {
+            shapeRenderer.dispose();
+        }
     }
+
 }

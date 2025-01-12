@@ -8,6 +8,9 @@ import com.justinditer.rpgengine.model.MapManager;
 import com.justinditer.rpgengine.model.Player;
 
 public class GameController extends InputAdapter {
+
+    // Class destined to provide an InputAdapter for the Game Screen. Handles inputs when the main game is running.
+
     private Player player;
     private MapManager mapManager;
     private Direction direction;
@@ -19,7 +22,7 @@ public class GameController extends InputAdapter {
     }
     @Override
     public boolean keyDown(int keycode) {
-        if (keycode == Input.Keys.ESCAPE) {
+        if (keycode == Input.Keys.ESCAPE) { // Menu opened Flag, to prevent player movement.
             menuActive = !menuActive;
             return true;
         }
@@ -37,18 +40,20 @@ public class GameController extends InputAdapter {
         if (direction != null && !menuActive) {
             Vector2 targetPosition = player.getMoveTarget(direction);
             if (mapManager.isWithinBounds(targetPosition) && !mapManager.isCollidable(targetPosition)) {
+                // checks if Menu is opened and if the destination tile is clear before moving position.
                 player.setPosition(targetPosition);
             }
             return true; // Input processed
         } else if (menuActive) {
             // TODO: Handle menu related inputs
+            // Was supposed to handle menu selection here.
             return true;
         }
-
         return false; // Input not processed
     }
 
     public boolean isMenuActive() {
         return menuActive;
+        // getter for the menuActive flag
     }
 }

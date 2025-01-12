@@ -8,14 +8,19 @@ import com.justinditer.rpgengine.view.MainMenuScreen;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class RPGGame extends Game {
+
+    // Main class. Very minimal.
+
     private SpriteBatch batch;
     private Texture playerTexture;
+    private Texture npcTexture;
 
 
     @Override
     public void create() {
         batch = new SpriteBatch();
         playerTexture = new Texture("placeholder_player.png");
+        npcTexture = new Texture("placeholder_npc.png");
         setScreen(new MainMenuScreen(this));
     }
 
@@ -27,13 +32,16 @@ public class RPGGame extends Game {
     @Override
     public void dispose() {
         if (getScreen() != null) {
-            getScreen().dispose(); // Dispose the current screen
+            getScreen().dispose();
         }
         if (batch != null) {
             batch.dispose();
         }
         if (playerTexture != null) {
             playerTexture.dispose();
+        }
+        if (npcTexture != null) {
+            npcTexture.dispose();
         }
         super.dispose();    }
 
@@ -43,5 +51,9 @@ public class RPGGame extends Game {
 
     public Texture getPlayerTexture() {
         return playerTexture;
+    }
+
+    public Texture getNpcTexture() {
+        return npcTexture;
     }
 }

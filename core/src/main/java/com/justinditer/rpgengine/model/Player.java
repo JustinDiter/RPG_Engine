@@ -42,6 +42,7 @@ public class Player extends Entity{
     }
 
     public Vector2 getMoveTarget(Direction direction) {
+        // Logic to calculate the next position on the map, to send to map manaager to check if space is free.
         switch (direction) {
             case UP:
                 return new Vector2(position.x, position.y + 16);

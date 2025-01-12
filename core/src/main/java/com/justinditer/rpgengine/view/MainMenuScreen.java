@@ -11,6 +11,10 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.justinditer.rpgengine.RPGGame;
 
 public class MainMenuScreen extends ScreenAdapter {
+
+    // Bare-bones Main menu placeholder.
+    // TODO: Continue, New Game, Load, Exit
+
     RPGGame game;
     BitmapFont font;
     Stage mainStage;
@@ -21,7 +25,7 @@ public class MainMenuScreen extends ScreenAdapter {
 
     @Override
     public void show(){
-        mainStage = new Stage(new FitViewport(800, 600));
+        mainStage = new Stage(new FitViewport(640, 480));
 
         Gdx.input.setInputProcessor(mainStage);
 
@@ -31,8 +35,8 @@ public class MainMenuScreen extends ScreenAdapter {
         Label titleLabel = new Label("Placeholder title !", labelStyle);
         Label interactLabel = new Label("Default: Press Enter to Continue", labelStyle);
 
-        titleLabel.setPosition(400, 400);
-        interactLabel.setPosition(400, 200);
+        titleLabel.setPosition(200, 400);
+        interactLabel.setPosition(200, 200);
 
         mainStage.addActor(titleLabel);
         mainStage.addActor(interactLabel);

@@ -6,6 +6,8 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 
 public abstract class Entity {
+
+    // Straightforward, typical Entity abstract class.
     public Vector2 position;
     public String name;
 
